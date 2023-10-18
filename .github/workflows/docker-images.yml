@@ -61,9 +61,9 @@ jobs:
         with:
           context: .
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}-base
+          tags: ${{ steps.meta.outputs.tags }}-base-jammy
           labels: ${{ steps.meta.outputs.labels }}
-          file: Dockerfile.base
+          file: Dockerfile.base-jammy
 
   build_standart_image:
     needs: [build_base_images]

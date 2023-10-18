@@ -1,7 +1,7 @@
 #front/go/ruby/all
 FROM golang:1.20.1 AS go
 
-FROM sentoz/sonar-test:0.1.0-base
+FROM sentoz/multi-sonarqube-scanner-cli:0.1.0-base-jammy
 
 LABEL org.opencontainers.image.authors="Dmitriy Okladin <sentoz66@gmail.com>"
 LABEL org.opencontainers.image.source="https://github.com/sentoz/multi-sonarqube-scanner-cli"
