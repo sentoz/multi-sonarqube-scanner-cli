@@ -401,27 +401,27 @@ jobs:
           body: |
             Standart image:
 
-            * `docker pull ghcr.io/sentoz/:${{ steps.env.outputs.PROJECT_TAG }}`
-            * `docker pull docker.io/sentoz/:${{ steps.env.outputs.PROJECT_TAG }}`
+            * `docker pull ghcr.io/sentoz/multi-sonarqube-scanner-cli:${{ steps.env.outputs.PROJECT_TAG }}`
+            * `docker pull docker.io/sentoz/multi-sonarqube-scanner-cli:${{ steps.env.outputs.PROJECT_TAG }}`
 
             Gradle images:
 
-            * `docker pull ghcr.io/sentoz/:${{ steps.env.outputs.PROJECT_TAG }}-gradle-7.3.3`
-            * `docker pull ghcr.io/sentoz/:${{ steps.env.outputs.PROJECT_TAG }}-gradle-8.1.1`
+            * `docker pull ghcr.io/sentoz/multi-sonarqube-scanner-cli:${{ steps.env.outputs.PROJECT_TAG }}-gradle-7.3.3`
+            * `docker pull ghcr.io/sentoz/multi-sonarqube-scanner-cli:${{ steps.env.outputs.PROJECT_TAG }}-gradle-8.1.1`
 
-            * `docker pull docker.io/sentoz/:${{ steps.env.outputs.PROJECT_TAG }}-gradle-7.3.3`
-            * `docker pull docker.io/sentoz/:${{ steps.env.outputs.PROJECT_TAG }}-gradle-8.1.1`
+            * `docker pull docker.io/sentoz/multi-sonarqube-scanner-cli:${{ steps.env.outputs.PROJECT_TAG }}-gradle-7.3.3`
+            * `docker pull docker.io/sentoz/multi-sonarqube-scanner-cli:${{ steps.env.outputs.PROJECT_TAG }}-gradle-8.1.1`
 
             .Net images:
 
-            * `docker pull ghcr.io/sentoz/:${{ steps.env.outputs.PROJECT_TAG }}-dotnet-3.1`
-            * `docker pull ghcr.io/sentoz/:${{ steps.env.outputs.PROJECT_TAG }}-dotnet-5.0`
-            * `docker pull ghcr.io/sentoz/:${{ steps.env.outputs.PROJECT_TAG }}-dotnet-6.0`
-            * `docker pull ghcr.io/sentoz/:${{ steps.env.outputs.PROJECT_TAG }}-dotnet-7.0`
+            * `docker pull ghcr.io/sentoz/multi-sonarqube-scanner-cli:${{ steps.env.outputs.PROJECT_TAG }}-dotnet-3.1`
+            * `docker pull ghcr.io/sentoz/multi-sonarqube-scanner-cli:${{ steps.env.outputs.PROJECT_TAG }}-dotnet-5.0`
+            * `docker pull ghcr.io/sentoz/multi-sonarqube-scanner-cli:${{ steps.env.outputs.PROJECT_TAG }}-dotnet-6.0`
+            * `docker pull ghcr.io/sentoz/multi-sonarqube-scanner-cli:${{ steps.env.outputs.PROJECT_TAG }}-dotnet-7.0`
 
-            * `docker pull docker.io/sentoz/:${{ steps.env.outputs.PROJECT_TAG }}-dotnet-3.1`
-            * `docker pull docker.io/sentoz/:${{ steps.env.outputs.PROJECT_TAG }}-dotnet-5.0`
-            * `docker pull docker.io/sentoz/:${{ steps.env.outputs.PROJECT_TAG }}-dotnet-6.0`
-            * `docker pull docker.io/sentoz/:${{ steps.env.outputs.PROJECT_TAG }}-dotnet-7.0`
+            * `docker pull docker.io/sentoz/multi-sonarqube-scanner-cli:${{ steps.env.outputs.PROJECT_TAG }}-dotnet-3.1`
+            * `docker pull docker.io/sentoz/multi-sonarqube-scanner-cli:${{ steps.env.outputs.PROJECT_TAG }}-dotnet-5.0`
+            * `docker pull docker.io/sentoz/multi-sonarqube-scanner-cli:${{ steps.env.outputs.PROJECT_TAG }}-dotnet-6.0`
+            * `docker pull docker.io/sentoz/multi-sonarqube-scanner-cli:${{ steps.env.outputs.PROJECT_TAG }}-dotnet-7.0`
           draft: false
           prerelease: false
