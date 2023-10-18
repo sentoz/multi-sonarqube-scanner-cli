@@ -26,11 +26,6 @@ WORKDIR /opt
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 # hadolint ignore=DL3008,DL3013,DL3016,DL3028,SC2015,SC1001
 RUN set -eux; \
-    wget -U "scannercli" -q -O "/opt/packages-microsoft-prod.deb" \
-        "https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb"; \
-    dpkg -i "/opt/packages-microsoft-prod.deb" ;\
-    rm "/opt/packages-microsoft-prod.deb"; \
-    apt-get --fix-broken -y --no-install-recommends install; \
     apt-get update && apt-get upgrade -y; \
     apt-get install -yq --no-install-recommends dotnet-sdk-7.0 && \
     apt-get clean && \
