@@ -19,7 +19,7 @@ jobs:
   build_base_images_focal:
     name: Building a basic docker image on focal
     runs-on: ubuntu-latest
-    permissions: &permissions
+    permissions:
       packages: write
       contents: write
     steps:
@@ -66,7 +66,9 @@ jobs:
   build_base_images_jammy:
     name: Building a basic docker image on jammy
     runs-on: ubuntu-latest
-    permissions: *permissions
+    permissions:
+      packages: write
+      contents: write
     steps:
       - *check_repo
 
@@ -97,7 +99,9 @@ jobs:
     needs: [ build_base_images_jammy ]
     name: Build standart image
     runs-on: ubuntu-latest
-    permissions: *permissions
+    permissions:
+      packages: write
+      contents: write
     steps:
       - *check_repo
 
@@ -128,7 +132,9 @@ jobs:
     needs: [ build_base_images_jammy ]
     name: Build Gradle 7.3.3 image
     runs-on: ubuntu-latest
-    permissions: *permissions
+    permissions:
+      packages: write
+      contents: write
     steps:
       - *check_repo
 
@@ -159,7 +165,9 @@ jobs:
     needs: [ build_base_images_jammy ]
     name: Build Gradle 8.1.1 image
     runs-on: ubuntu-latest
-    permissions: *permissions
+    permissions:
+      packages: write
+      contents: write
     steps:
       - *check_repo
 
@@ -190,7 +198,9 @@ jobs:
     needs: [ build_base_images_focal ]
     name: Build .Net 3.1 image
     runs-on: ubuntu-latest
-    permissions: *permissions
+    permissions:
+      packages: write
+      contents: write
     steps:
       - *check_repo
 
@@ -221,7 +231,9 @@ jobs:
     needs: [ build_base_images_focal ]
     name: Build .Net 5.0 image
     runs-on: ubuntu-latest
-    permissions: *permissions
+    permissions:
+      packages: write
+      contents: write
     steps:
       - *check_repo
 
@@ -252,7 +264,9 @@ jobs:
     needs: [ build_base_images_jammy ]
     name: Build .Net 6.0 image
     runs-on: ubuntu-latest
-    permissions: *permissions
+    permissions:
+      packages: write
+      contents: write
     steps:
       - *check_repo
 
@@ -283,7 +297,9 @@ jobs:
     needs: [ build_base_images_jammy ]
     name: Build .Net 7.0 image
     runs-on: ubuntu-latest
-    permissions: *permissions
+    permissions:
+      packages: write
+      contents: write
     steps:
       - *check_repo
 
@@ -321,7 +337,9 @@ jobs:
       - build_dotnet_7_image
     name: Release
     runs-on: ubuntu-latest
-    permissions: *permissions
+    permissions:
+      packages: write
+      contents: write
     steps:
       - name: Set env
         id: env
