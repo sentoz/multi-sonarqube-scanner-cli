@@ -1,0 +1,63 @@
+#base
+FROM eclipse-temurin:17-jdk
+
+LABEL org.opencontainers.image.authors="Dmitriy Okladin <sentoz66@gmail.com>"
+LABEL org.opencontainers.image.source="https://github.com/sentoz/multi-sonarqube-scanner-cli"
+
+ARG POSTGRES_DRIVER_VERSION=42.2.19
+ARG MYSQL_DRIVER_VERSION=8.0.23
+ARG DEPENDENCY_CHECK_VERSION=8.1.2
+ARG DEPENDENCY_CHECK_HOME=/opt/dependency-check
+
+ARG SONARQUBE_TOKEN
+ARG SONARQUBE_URL
+
+ARG SONAR_SCANNER_VERSION=4.8.0.2856
+
+ARG SONAR_SCANNER_HOME=/opt/sonar-scanner
+
+ENV HOME=/tmp
+ENV XDG_CONFIG_HOME=/tmp
+ENV SONAR_SCANNER_HOME=$SONAR_SCANNER_HOME
+ENV SONAR_USER_HOME=$SONAR_SCANNER_HOME/.sonar
+ENV PATH=$SONAR_SCANNER_HOME/bin:$PATH
+ENV SRC_PATH=/usr/src
+ENV LANG=en_US.UTF-8
+ENV LC_ALL=en_US.UTF-8
+
+WORKDIR /opt
+
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+# hadolint ignore=DL3008,DL3013,DL3016,DL3028,SC2015,SC1001
+RUN set -eux; \
+    apt-get update && apt-get upgrade -y; \
+    apt-get install -yq --no-install-recommends \
+        unzip gnupg git jq bash shellcheck grep; \
+    wget -U "scannercli" -q -O /opt/dependency-check.zip https://github.com/jeremylong/DependencyCheck/releases/download/v$DEPENDENCY_CHECK_VERSION/dependency-check-$DEPENDENCY_CHECK_VERSION-release.zip; \
+    wget -U "scannercli" -q -O /opt/sonar-scanner-cli.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-$SONAR_SCANNER_VERSION.zip; \
+    wget -U "scannercli" -q -O /opt/sonar-scanner-cli.zip.asc https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-$SONAR_SCANNER_VERSION.zip.asc; \
+    for server in $(shuf -e ha.pool.sks-keyservers.net \
+                        hkp://p80.pool.sks-keyservers.net:80 \
+                        keyserver.ubuntu.com \
+                        hkp://keyserver.ubuntu.com:80 \
+                        pgp.mit.edu) ; do \
+      gpg --batch --keyserver "$server" --recv-keys 679F1EE92B19609DE816FDE81DB198F93525EC1A && break || : ; \
+    done; \
+    gpg --verify /opt/sonar-scanner-cli.zip.asc /opt/sonar-scanner-cli.zip; \
+    unzip dependency-check.zip; \
+    rm dependency-check.zip; \
+    wget -U "scannercli" -q -O "$DEPENDENCY_CHECK_HOME/plugins/postgresql-$POSTGRES_DRIVER_VERSION.jar" https://jdbc.postgresql.org/download/postgresql-$POSTGRES_DRIVER_VERSION.jar; \
+    wget -U "scannercli" -q -O /opt/mysql-connector-java-$MYSQL_DRIVER_VERSION.zip https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-$MYSQL_DRIVER_VERSION.zip; \
+    unzip mysql-connector-java-$MYSQL_DRIVER_VERSION.zip; \
+    mv mysql-connector-java-$MYSQL_DRIVER_VERSION/mysql-connector-java-$MYSQL_DRIVER_VERSION.jar $DEPENDENCY_CHECK_HOME/plugins/mysql-connector-java-$MYSQL_DRIVER_VERSION.jar; \
+    rm -rf mysql-connector-java-$MYSQL_DRIVER_VERSION.zip mysql-connector-java-$MYSQL_DRIVER_VERSION; \
+    unzip sonar-scanner-cli.zip; \
+    rm sonar-scanner-cli.zip sonar-scanner-cli.zip.asc; \
+    mv "sonar-scanner-$SONAR_SCANNER_VERSION" "$SONAR_SCANNER_HOME";
+
+COPY ./docker_entrypoint.sh /usr/bin/docker_entrypoint
+COPY ./scripts/ /usr/bin/scripts/
+
+WORKDIR $SRC_PATH
+
+ENTRYPOINT ["/usr/bin/docker_entrypoint"]
