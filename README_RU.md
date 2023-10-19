@@ -266,8 +266,8 @@
   для обратной связи
 
 <!-- Links -->
-[eng 🇬🇧]: README.md
-[rus 🇷🇺]: README_RU.md
+[eng 🇬🇧]: ./README.md
+[rus 🇷🇺]: ./README_RU.md
 
 [SonarQube Scanner Cli]: https://github.com/SonarSource/sonar-scanner-cli
 [OWASP DependencyCheck]: https://github.com/jeremylong/DependencyCheck
