@@ -262,7 +262,7 @@ the same directory as the *.sln file according to the
 
 <!-- Links -->
 [eng 🇬🇧]: README.md
-[rus 🇷🇺]: README.ru.md
+[rus 🇷🇺]: README_RU.md
 
 [SonarQube Scanner Cli]: https://github.com/SonarSource/sonar-scanner-cli
 [OWASP DependencyCheck]: https://github.com/jeremylong/DependencyCheck
