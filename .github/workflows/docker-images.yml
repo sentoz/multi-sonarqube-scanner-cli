@@ -14,15 +14,32 @@ on:
       - CNAME
       - LICENSE
 jobs:
+  shellcheck:
+    name: Check shell scripts
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+      - name: shellcheck
+        uses: reviewdog/action-shellcheck@v1
+        with:
+          reporter: github-pr-review
+          pattern: "*.sh"
+          exclude: "./.git/*"
   build_base_images_focal:
     name: Building a basic docker image on focal
+    needs: [shellcheck]
     runs-on: ubuntu-latest
     permissions:
       packages: write
       contents: write
     steps:
       - name: Check out the repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+      - name: Hadolint
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: Dockerfile.base-focal
       - name: Log in to Docker Hub Container registry
         if: github.event_name != 'pull_request'
         uses: docker/login-action@v3
@@ -38,13 +55,17 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@v3
+        uses: docker/metadata-action@v5
         with:
           images: |
             ${{ github.repository }}
             ghcr.io/${{ github.repository }}
+          flavor: |
+            latest=false
+            suffix=-base-focal,onlatest=true
           tags: |
-            type=semver,pattern={{version}}-base-focal
+            type=semver,pattern={{version}}
+            type=schedule,pattern=latest
       - name: Build and push Docker base focal
         uses: docker/build-push-action@v5
         with:
@@ -55,13 +76,18 @@ jobs:
           file: Dockerfile.base-focal
   build_base_images_jammy:
     name: Building a basic docker image on jammy
+    needs: [shellcheck]
     runs-on: ubuntu-latest
     permissions:
       packages: write
       contents: write
     steps:
       - name: Check out the repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+      - name: Hadolint
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: Dockerfile.base-jammy
       - name: Log in to Docker Hub Container registry
         if: github.event_name != 'pull_request'
         uses: docker/login-action@v3
@@ -77,13 +103,17 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@v3
+        uses: docker/metadata-action@v5
         with:
           images: |
             ${{ github.repository }}
             ghcr.io/${{ github.repository }}
+          flavor: |
+            latest=false
+            suffix=-base-jammy,onlatest=true
           tags: |
-            type=semver,pattern={{version}}-base-jammy
+            type=semver,pattern={{version}}
+            type=schedule,pattern=latest
       - name: Build and push Docker base jammy
         uses: docker/build-push-action@v5
         with:
@@ -101,7 +131,11 @@ jobs:
       contents: write
     steps:
       - name: Check out the repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+      - name: Hadolint
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: Dockerfile
       - name: Log in to Docker Hub Container registry
         if: github.event_name != 'pull_request'
         uses: docker/login-action@v3
@@ -117,13 +151,25 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@v3
+        uses: docker/metadata-action@v5
         with:
           images: |
             ${{ github.repository }}
             ghcr.io/${{ github.repository }}
+          flavor: |
+            latest=false
           tags: |
             type=semver,pattern={{version}}
+            type=schedule,pattern=latest
+      - name: Set tag
+        id: tag
+        shell: bash
+        run: |
+          if [[ $GITHUB_REF_TYPE == "tag" ]] ; then
+            echo "PROJECT_TAG=${GITHUB_REF#refs/tags/}"  >> $GITHUB_OUTPUT
+          elif [[ $GITHUB_REF_TYPE == "branch" ]] ; then
+            echo "PROJECT_TAG=latest"  >> $GITHUB_OUTPUT
+          fi
       - name: Build and push Docker
         uses: docker/build-push-action@v5
         with:
@@ -132,6 +178,9 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           file: Dockerfile
+          build-args: |
+            BASE_IMAGE_NAME=${{ github.repository }}
+            BASE_IMAGE_TAG=${{ steps.tag.outputs.PROJECT_TAG }}-base-jammy
   build_gradle_733_image:
     needs: [build_base_images_jammy]
     name: Build Gradle 7.3.3 image
@@ -141,7 +190,11 @@ jobs:
       contents: write
     steps:
       - name: Check out the repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+      - name: Hadolint
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: Dockerfile.gradle-7.3.3
       - name: Log in to Docker Hub Container registry
         if: github.event_name != 'pull_request'
         uses: docker/login-action@v3
@@ -157,13 +210,26 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@v3
+        uses: docker/metadata-action@v5
         with:
           images: |
             ${{ github.repository }}
             ghcr.io/${{ github.repository }}
+          flavor: |
+            latest=false
+            suffix=-gradle-7.3.3,onlatest=true
           tags: |
-            type=semver,pattern={{version}}-gradle-7.3.3
+            type=semver,pattern={{version}}
+            type=schedule,pattern=latest
+      - name: Set tag
+        id: tag
+        shell: bash
+        run: |
+          if [[ $GITHUB_REF_TYPE == "tag" ]] ; then
+            echo "PROJECT_TAG=${GITHUB_REF#refs/tags/}"  >> $GITHUB_OUTPUT
+          elif [[ $GITHUB_REF_TYPE == "branch" ]] ; then
+            echo "PROJECT_TAG=latest"  >> $GITHUB_OUTPUT
+          fi
       - name: Build and push Docker Gradle 7.3.3
         uses: docker/build-push-action@v5
         with:
@@ -172,6 +238,9 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           file: Dockerfile.gradle-7.3.3
+          build-args: |
+            BASE_IMAGE_NAME=${{ github.repository }}
+            BASE_IMAGE_TAG=${{ steps.tag.outputs.PROJECT_TAG }}-base-jammy
   build_gradle_811_image:
     needs: [build_base_images_jammy]
     name: Build Gradle 8.1.1 image
@@ -181,7 +250,11 @@ jobs:
       contents: write
     steps:
       - name: Check out the repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+      - name: Hadolint
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: Dockerfile.gradle-8.1.1
       - name: Log in to Docker Hub Container registry
         if: github.event_name != 'pull_request'
         uses: docker/login-action@v3
@@ -197,13 +270,26 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@v3
+        uses: docker/metadata-action@v5
         with:
           images: |
             ${{ github.repository }}
             ghcr.io/${{ github.repository }}
+          flavor: |
+            latest=false
+            suffix=-gradle-8.1.1,onlatest=true
           tags: |
-            type=semver,pattern={{version}}-gradle-8.1.1
+            type=semver,pattern={{version}}
+            type=schedule,pattern=latest
+      - name: Set tag
+        id: tag
+        shell: bash
+        run: |
+          if [[ $GITHUB_REF_TYPE == "tag" ]] ; then
+            echo "PROJECT_TAG=${GITHUB_REF#refs/tags/}"  >> $GITHUB_OUTPUT
+          elif [[ $GITHUB_REF_TYPE == "branch" ]] ; then
+            echo "PROJECT_TAG=latest"  >> $GITHUB_OUTPUT
+          fi
       - name: Build and push Docker Gradle 8.1.1
         uses: docker/build-push-action@v5
         with:
@@ -212,6 +298,9 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           file: Dockerfile.gradle-8.1.1
+          build-args: |
+            BASE_IMAGE_NAME=${{ github.repository }}
+            BASE_IMAGE_TAG=${{ steps.tag.outputs.PROJECT_TAG }}-base-jammy
   build_dotnet_31_image:
     needs: [build_base_images_focal]
     name: Build .Net 3.1 image
@@ -221,7 +310,11 @@ jobs:
       contents: write
     steps:
       - name: Check out the repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+      - name: Hadolint
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: Dockerfile.dotnet-3.1
       - name: Log in to Docker Hub Container registry
         if: github.event_name != 'pull_request'
         uses: docker/login-action@v3
@@ -237,13 +330,26 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@v3
+        uses: docker/metadata-action@v5
         with:
           images: |
             ${{ github.repository }}
             ghcr.io/${{ github.repository }}
+          flavor: |
+            latest=false
+            suffix=-dotnet-3.1,onlatest=true
           tags: |
-            type=semver,pattern={{version}}-dotnet-3.1
+            type=semver,pattern={{version}}
+            type=schedule,pattern=latest
+      - name: Set tag
+        id: tag
+        shell: bash
+        run: |
+          if [[ $GITHUB_REF_TYPE == "tag" ]] ; then
+            echo "PROJECT_TAG=${GITHUB_REF#refs/tags/}"  >> $GITHUB_OUTPUT
+          elif [[ $GITHUB_REF_TYPE == "branch" ]] ; then
+            echo "PROJECT_TAG=latest"  >> $GITHUB_OUTPUT
+          fi
       - name: Build and push Docker .Net-3.1
         uses: docker/build-push-action@v5
         with:
@@ -252,6 +358,9 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           file: Dockerfile.dotnet-3.1
+          build-args: |
+            BASE_IMAGE_NAME=${{ github.repository }}
+            BASE_IMAGE_TAG=${{ steps.tag.outputs.PROJECT_TAG }}-base-focal
   build_dotnet_5_image:
     needs: [build_base_images_focal]
     name: Build .Net 5.0 image
@@ -261,7 +370,11 @@ jobs:
       contents: write
     steps:
       - name: Check out the repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+      - name: Hadolint
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: Dockerfile.dotnet-5.0
       - name: Log in to Docker Hub Container registry
         if: github.event_name != 'pull_request'
         uses: docker/login-action@v3
@@ -277,13 +390,26 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@v3
+        uses: docker/metadata-action@v5
         with:
           images: |
             ${{ github.repository }}
             ghcr.io/${{ github.repository }}
+          flavor: |
+            latest=false
+            suffix=-dotnet-5.0,onlatest=true
           tags: |
-            type=semver,pattern={{version}}-dotnet-5.0
+            type=semver,pattern={{version}}
+            type=schedule,pattern=latest
+      - name: Set tag
+        id: tag
+        shell: bash
+        run: |
+          if [[ $GITHUB_REF_TYPE == "tag" ]] ; then
+            echo "PROJECT_TAG=${GITHUB_REF#refs/tags/}"  >> $GITHUB_OUTPUT
+          elif [[ $GITHUB_REF_TYPE == "branch" ]] ; then
+            echo "PROJECT_TAG=latest"  >> $GITHUB_OUTPUT
+          fi
       - name: Build and push Docker .Net-5.0
         uses: docker/build-push-action@v5
         with:
@@ -292,6 +418,9 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}-dotnet-5.0
           labels: ${{ steps.meta.outputs.labels }}
           file: Dockerfile.dotnet-5.0
+          build-args: |
+            BASE_IMAGE_NAME=${{ github.repository }}
+            BASE_IMAGE_TAG=${{ steps.tag.outputs.PROJECT_TAG }}-base-focal
   build_dotnet_6_image:
     needs: [build_base_images_jammy]
     name: Build .Net 6.0 image
@@ -301,7 +430,11 @@ jobs:
       contents: write
     steps:
       - name: Check out the repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+      - name: Hadolint
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: Dockerfile.dotnet-6.0
       - name: Log in to Docker Hub Container registry
         if: github.event_name != 'pull_request'
         uses: docker/login-action@v3
@@ -317,13 +450,26 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@v3
+        uses: docker/metadata-action@v5
         with:
           images: |
             ${{ github.repository }}
             ghcr.io/${{ github.repository }}
+          flavor: |
+            latest=false
+            suffix=-dotnet-6.0,onlatest=true
           tags: |
-            type=semver,pattern={{version}}-dotnet-6.0
+            type=semver,pattern={{version}}
+            type=schedule,pattern=latest
+      - name: Set tag
+        id: tag
+        shell: bash
+        run: |
+          if [[ $GITHUB_REF_TYPE == "tag" ]] ; then
+            echo "PROJECT_TAG=${GITHUB_REF#refs/tags/}"  >> $GITHUB_OUTPUT
+          elif [[ $GITHUB_REF_TYPE == "branch" ]] ; then
+            echo "PROJECT_TAG=latest"  >> $GITHUB_OUTPUT
+          fi
       - name: Build and push Docker .Net-6.0
         uses: docker/build-push-action@v5
         with:
@@ -332,6 +478,9 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           file: Dockerfile.dotnet-6.0
+          build-args: |
+            BASE_IMAGE_NAME=${{ github.repository }}
+            BASE_IMAGE_TAG=${{ steps.tag.outputs.PROJECT_TAG }}-base-jammy
   build_dotnet_7_image:
     needs: [build_base_images_jammy]
     name: Build .Net 7.0 image
@@ -341,7 +490,11 @@ jobs:
       contents: write
     steps:
       - name: Check out the repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+      - name: Hadolint
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: Dockerfile.dotnet-7.0
       - name: Log in to Docker Hub Container registry
         if: github.event_name != 'pull_request'
         uses: docker/login-action@v3
@@ -357,13 +510,26 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@v3
+        uses: docker/metadata-action@v5
         with:
           images: |
             ${{ github.repository }}
             ghcr.io/${{ github.repository }}
+          flavor: |
+            latest=false
+            suffix=-dotnet-7.0,onlatest=true
           tags: |
-            type=semver,pattern={{version}}-dotnet-7.0
+            type=semver,pattern={{version}}
+            type=schedule,pattern=latest
+      - name: Set tag
+        id: tag
+        shell: bash
+        run: |
+          if [[ $GITHUB_REF_TYPE == "tag" ]] ; then
+            echo "PROJECT_TAG=${GITHUB_REF#refs/tags/}"  >> $GITHUB_OUTPUT
+          elif [[ $GITHUB_REF_TYPE == "branch" ]] ; then
+            echo "PROJECT_TAG=latest"  >> $GITHUB_OUTPUT
+          fi
       - name: Build and push Docker .Net-7.0
         uses: docker/build-push-action@v5
         with:
@@ -372,6 +538,9 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           file: Dockerfile.dotnet-7.0
+          build-args: |
+            BASE_IMAGE_NAME=${{ github.repository }}
+            BASE_IMAGE_TAG=${{ steps.tag.outputs.PROJECT_TAG }}-base-jammy
   release:
     needs:
       - build_standart_image
@@ -382,6 +551,7 @@ jobs:
       - build_dotnet_6_image
       - build_dotnet_7_image
     name: Release
+    if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
     runs-on: ubuntu-latest
     permissions:
       packages: write
@@ -390,9 +560,9 @@ jobs:
       - name: Set env
         id: env
         run: |
-          echo ::set-output name=PROJECT_NAME::${GITHUB_REF#refs/*/}
-          echo ::set-output name=PROJECT_BRANCH::${GITHUB_REF#refs/heads/}
-          echo ::set-output name=PROJECT_TAG::${GITHUB_REF#refs/tags/}
+          echo "PROJECT_NAME=${GITHUB_REF#refs/*/}"  >> $GITHUB_OUTPUT
+          echo "PROJECT_BRANCH=${GITHUB_REF#refs/heads/}"  >> $GITHUB_OUTPUT
+          echo "PROJECT_TAG=${GITHUB_REF#refs/tags/}"  >> $GITHUB_OUTPUT
       - name: Create Release
         id: create_release
         uses: ncipollo/release-action@v1
