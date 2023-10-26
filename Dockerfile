@@ -1,7 +1,9 @@
 #front/go/ruby/all
 FROM golang:1.20.1 AS go
 
-FROM sentoz/multi-sonarqube-scanner-cli:0.1.0-base-jammy
+ARG BASE_IMAGE_NAME="sentoz/multi-sonarqube-scanner-cli"
+ARG BASE_IMAGE_TAG="latest-base-jammy"
+FROM $BASE_IMAGE_NAME:$BASE_IMAGE_TAG
 
 LABEL org.opencontainers.image.authors="Dmitriy Okladin <sentoz66@gmail.com>"
 LABEL org.opencontainers.image.source="https://github.com/sentoz/multi-sonarqube-scanner-cli"
