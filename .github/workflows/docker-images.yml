@@ -28,6 +28,7 @@ jobs:
           exclude: "./.git/*"
   build_base_images_focal:
     name: Building a basic docker image on focal
+    needs: [shellcheck]
     runs-on: ubuntu-latest
     permissions:
       packages: write
@@ -75,6 +76,7 @@ jobs:
           file: Dockerfile.base-focal
   build_base_images_jammy:
     name: Building a basic docker image on jammy
+    needs: [shellcheck]
     runs-on: ubuntu-latest
     permissions:
       packages: write
@@ -164,7 +166,7 @@ jobs:
         run: |
           if {{ $GITHUB_REF_TYPE == "tag" }}; then
             echo "PROJECT_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
-          elif {{ $GITHUB_REF_TYPE == "branch" }}
+          elif {{ $GITHUB_REF_TYPE == "branch" }}; then
             echo "PROJECT_TAG=latest" >> $GITHUB_OUTPUT
           fi
       - name: Build and push Docker
@@ -223,7 +225,7 @@ jobs:
         run: |
           if {{ $GITHUB_REF_TYPE == "tag" }}; then
             echo "PROJECT_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
-          elif {{ $GITHUB_REF_TYPE == "branch" }}
+          elif {{ $GITHUB_REF_TYPE == "branch" }}; then
             echo "PROJECT_TAG=latest" >> $GITHUB_OUTPUT
           fi
       - name: Build and push Docker Gradle 7.3.3
@@ -282,7 +284,7 @@ jobs:
         run: |
           if {{ $GITHUB_REF_TYPE == "tag" }}; then
             echo "PROJECT_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
-          elif {{ $GITHUB_REF_TYPE == "branch" }}
+          elif {{ $GITHUB_REF_TYPE == "branch" }}; then
             echo "PROJECT_TAG=latest" >> $GITHUB_OUTPUT
           fi
       - name: Build and push Docker Gradle 8.1.1
@@ -341,7 +343,7 @@ jobs:
         run: |
           if {{ $GITHUB_REF_TYPE == "tag" }}; then
             echo "PROJECT_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
-          elif {{ $GITHUB_REF_TYPE == "branch" }}
+          elif {{ $GITHUB_REF_TYPE == "branch" }}; then
             echo "PROJECT_TAG=latest" >> $GITHUB_OUTPUT
           fi
       - name: Build and push Docker .Net-3.1
@@ -400,7 +402,7 @@ jobs:
         run: |
           if {{ $GITHUB_REF_TYPE == "tag" }}; then
             echo "PROJECT_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
-          elif {{ $GITHUB_REF_TYPE == "branch" }}
+          elif {{ $GITHUB_REF_TYPE == "branch" }}; then
             echo "PROJECT_TAG=latest" >> $GITHUB_OUTPUT
           fi
       - name: Build and push Docker .Net-5.0
@@ -459,7 +461,7 @@ jobs:
         run: |
           if {{ $GITHUB_REF_TYPE == "tag" }}; then
             echo "PROJECT_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
-          elif {{ $GITHUB_REF_TYPE == "branch" }}
+          elif {{ $GITHUB_REF_TYPE == "branch" }}; then
             echo "PROJECT_TAG=latest" >> $GITHUB_OUTPUT
           fi
       - name: Build and push Docker .Net-6.0
@@ -518,7 +520,7 @@ jobs:
         run: |
           if {{ $GITHUB_REF_TYPE == "tag" }}; then
             echo "PROJECT_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
-          elif {{ $GITHUB_REF_TYPE == "branch" }}
+          elif {{ $GITHUB_REF_TYPE == "branch" }}; then
             echo "PROJECT_TAG=latest" >> $GITHUB_OUTPUT
           fi
       - name: Build and push Docker .Net-7.0
