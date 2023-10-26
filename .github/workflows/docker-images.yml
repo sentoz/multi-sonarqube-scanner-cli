@@ -163,11 +163,12 @@ jobs:
             type=schedule,pattern=latest
       - name: Set tag
         id: tag
+        shell: bash
         run: |
-          if {{ $GITHUB_REF_TYPE == "tag" }}; then
-            echo "PROJECT_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
-          elif {{ $GITHUB_REF_TYPE == "branch" }}; then
-            echo "PROJECT_TAG=latest" >> $GITHUB_OUTPUT
+          if [[ $GITHUB_REF_TYPE == "tag" ]] ; then
+            echo "PROJECT_TAG=${GITHUB_REF#refs/tags/}"  >> $GITHUB_OUTPUT
+          elif [[ $GITHUB_REF_TYPE == "branch" ]] ; then
+            echo "PROJECT_TAG=latest"  >> $GITHUB_OUTPUT
           fi
       - name: Build and push Docker
         uses: docker/build-push-action@v5
@@ -222,11 +223,12 @@ jobs:
             type=schedule,pattern=latest
       - name: Set tag
         id: tag
+        shell: bash
         run: |
-          if {{ $GITHUB_REF_TYPE == "tag" }}; then
-            echo "PROJECT_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
-          elif {{ $GITHUB_REF_TYPE == "branch" }}; then
-            echo "PROJECT_TAG=latest" >> $GITHUB_OUTPUT
+          if [[ $GITHUB_REF_TYPE == "tag" ]] ; then
+            echo "PROJECT_TAG=${GITHUB_REF#refs/tags/}"  >> $GITHUB_OUTPUT
+          elif [[ $GITHUB_REF_TYPE == "branch" ]] ; then
+            echo "PROJECT_TAG=latest"  >> $GITHUB_OUTPUT
           fi
       - name: Build and push Docker Gradle 7.3.3
         uses: docker/build-push-action@v5
@@ -281,11 +283,12 @@ jobs:
             type=schedule,pattern=latest
       - name: Set tag
         id: tag
+        shell: bash
         run: |
-          if {{ $GITHUB_REF_TYPE == "tag" }}; then
-            echo "PROJECT_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
-          elif {{ $GITHUB_REF_TYPE == "branch" }}; then
-            echo "PROJECT_TAG=latest" >> $GITHUB_OUTPUT
+          if [[ $GITHUB_REF_TYPE == "tag" ]] ; then
+            echo "PROJECT_TAG=${GITHUB_REF#refs/tags/}"  >> $GITHUB_OUTPUT
+          elif [[ $GITHUB_REF_TYPE == "branch" ]] ; then
+            echo "PROJECT_TAG=latest"  >> $GITHUB_OUTPUT
           fi
       - name: Build and push Docker Gradle 8.1.1
         uses: docker/build-push-action@v5
@@ -340,11 +343,12 @@ jobs:
             type=schedule,pattern=latest
       - name: Set tag
         id: tag
+        shell: bash
         run: |
-          if {{ $GITHUB_REF_TYPE == "tag" }}; then
-            echo "PROJECT_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
-          elif {{ $GITHUB_REF_TYPE == "branch" }}; then
-            echo "PROJECT_TAG=latest" >> $GITHUB_OUTPUT
+          if [[ $GITHUB_REF_TYPE == "tag" ]] ; then
+            echo "PROJECT_TAG=${GITHUB_REF#refs/tags/}"  >> $GITHUB_OUTPUT
+          elif [[ $GITHUB_REF_TYPE == "branch" ]] ; then
+            echo "PROJECT_TAG=latest"  >> $GITHUB_OUTPUT
           fi
       - name: Build and push Docker .Net-3.1
         uses: docker/build-push-action@v5
@@ -399,11 +403,12 @@ jobs:
             type=schedule,pattern=latest
       - name: Set tag
         id: tag
+        shell: bash
         run: |
-          if {{ $GITHUB_REF_TYPE == "tag" }}; then
-            echo "PROJECT_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
-          elif {{ $GITHUB_REF_TYPE == "branch" }}; then
-            echo "PROJECT_TAG=latest" >> $GITHUB_OUTPUT
+          if [[ $GITHUB_REF_TYPE == "tag" ]] ; then
+            echo "PROJECT_TAG=${GITHUB_REF#refs/tags/}"  >> $GITHUB_OUTPUT
+          elif [[ $GITHUB_REF_TYPE == "branch" ]] ; then
+            echo "PROJECT_TAG=latest"  >> $GITHUB_OUTPUT
           fi
       - name: Build and push Docker .Net-5.0
         uses: docker/build-push-action@v5
@@ -458,11 +463,12 @@ jobs:
             type=schedule,pattern=latest
       - name: Set tag
         id: tag
+        shell: bash
         run: |
-          if {{ $GITHUB_REF_TYPE == "tag" }}; then
-            echo "PROJECT_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
-          elif {{ $GITHUB_REF_TYPE == "branch" }}; then
-            echo "PROJECT_TAG=latest" >> $GITHUB_OUTPUT
+          if [[ $GITHUB_REF_TYPE == "tag" ]] ; then
+            echo "PROJECT_TAG=${GITHUB_REF#refs/tags/}"  >> $GITHUB_OUTPUT
+          elif [[ $GITHUB_REF_TYPE == "branch" ]] ; then
+            echo "PROJECT_TAG=latest"  >> $GITHUB_OUTPUT
           fi
       - name: Build and push Docker .Net-6.0
         uses: docker/build-push-action@v5
@@ -517,11 +523,12 @@ jobs:
             type=schedule,pattern=latest
       - name: Set tag
         id: tag
+        shell: bash
         run: |
-          if {{ $GITHUB_REF_TYPE == "tag" }}; then
-            echo "PROJECT_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
-          elif {{ $GITHUB_REF_TYPE == "branch" }}; then
-            echo "PROJECT_TAG=latest" >> $GITHUB_OUTPUT
+          if [[ $GITHUB_REF_TYPE == "tag" ]] ; then
+            echo "PROJECT_TAG=${GITHUB_REF#refs/tags/}"  >> $GITHUB_OUTPUT
+          elif [[ $GITHUB_REF_TYPE == "branch" ]] ; then
+            echo "PROJECT_TAG=latest"  >> $GITHUB_OUTPUT
           fi
       - name: Build and push Docker .Net-7.0
         uses: docker/build-push-action@v5
