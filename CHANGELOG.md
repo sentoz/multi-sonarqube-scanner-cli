@@ -5,6 +5,13 @@ All noticeable changes to this project will be documented in this file.
 The format is based on [changelog][keepachangelog], and this project adheres
 to [semantic versioning][semver].
 
+## [0.1.1][] `2023-11-16`
+
+### Fixed
+
+* Build .Net 3.1 and 5.0 (set static version dotnet-reportgenerator-globaltool
+  5.1.26)
+
 ## [0.1.0][] `2023-10-18`
 
 ### Added
@@ -18,4 +25,5 @@ to [semantic versioning][semver].
 
 <!-- Tags -->
 
+[0.1.1]: https://github.com/sentoz/multi-sonarqube-scanner-cli/tree/0.1.1
 [0.1.0]: https://github.com/sentoz/multi-sonarqube-scanner-cli/tree/0.1.0

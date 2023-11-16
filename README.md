@@ -97,18 +97,18 @@ This image allows you to scan projects implemented in languages:
 
 ### Images for analyzing .NET projects
 
-`sentoz/multi-sonar-scanner:0.1.0-dotnet-3.1`  
-`sentoz/multi-sonar-scanner:0.1.0-dotnet-5.0`  
-`sentoz/multi-sonar-scanner:0.1.0-dotnet-6.0`  
-`sentoz/multi-sonar-scanner:0.1.0-dotnet-7.0`  
+`sentoz/multi-sonarqube-scanner-cli:0.1.1-dotnet-3.1`  
+`sentoz/multi-sonarqube-scanner-cli:0.1.1-dotnet-5.0`  
+`sentoz/multi-sonarqube-scanner-cli:0.1.1-dotnet-6.0`  
+`sentoz/multi-sonarqube-scanner-cli:0.1.1-dotnet-7.0`  
 
 Each image is built on the latest stable version of `.Net`, includes
 `dotnet sonarscanner` and `reportgenerator`.
 
 ### Image for analyzing Gradle projects
 
-`sentoz/multi-sonar-scanner:0.1.0-gradle-8.1.1`  
-`sentoz/multi-sonar-scanner:0.1.0-gradle-7.3.3`  
+`sentoz/multi-sonarqube-scanner-cli:0.1.1-gradle-8.1.1`  
+`sentoz/multi-sonarqube-scanner-cli:0.1.1-gradle-7.3.3`  
 
 The gradle binaries of the latest stable version are packed into the image.
 
