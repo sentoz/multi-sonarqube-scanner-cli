@@ -13,6 +13,7 @@ on:
       - '**.yaml'
       - CNAME
       - LICENSE
+
 jobs:
   shellcheck:
     name: Check shell scripts
@@ -26,9 +27,21 @@ jobs:
           reporter: github-pr-review
           pattern: "*.sh"
           exclude: "./.git/*"
+  mdlint:
+    name: MarkdownLint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+      - name: markdownlint-cli
+        uses: nosborn/github-action-markdown-cli@v3.3.0
+        with:
+          files: .
+          config_file: .markdownlint.yaml
+          ignore_files: ./LICENSE
   build_base_images_focal:
     name: Building a basic docker image on focal
-    needs: [shellcheck]
+    needs: [shellcheck, mdlint]
     runs-on: ubuntu-latest
     permissions:
       packages: write
@@ -76,7 +89,7 @@ jobs:
           file: Dockerfile.base-focal
   build_base_images_jammy:
     name: Building a basic docker image on jammy
-    needs: [shellcheck]
+    needs: [shellcheck, mdlint]
     runs-on: ubuntu-latest
     permissions:
       packages: write
