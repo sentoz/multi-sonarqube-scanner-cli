@@ -1,6 +1,16 @@
 <!-- omit in toc -->
 # Multi SonarQube Scanner
 
+<!-- markdownlint-disable MD033 -->
+![Gitleaks][gitleaks-img]
+![Hadolint][hadolint-img]
+
+[![GPL-3 licensed][license-img]][license]
+[![Docker Image CI][docker-image-ci-img]][docker-image-ci]
+[![GitHub release][release-img]][release]
+
+<!-- markdownlint-enable MD033 -->
+
 <!-- rule: current lang, other langs sorted by alpha -->
 > This document is available in languages: [eng 🇬🇧][], [rus 🇷🇺][]
 
@@ -153,7 +163,7 @@
   разделенный запятой, к примеру:
   `sonar.exclusions=/path, sonar.test.exclusions=/path2`
 * **`SONARQUBE_GENERIC_REPORTS_FILE`**=`$PROJECT_DIR/issues.json` - Файл с
-  **generic** репортами
+  [generic][] репортами
 * **`SONARQUBE_QUALITYGATE_WAIT`**=`true` - ожидание получения состояния
   Quality Gate
 * **`SONARQUBE_QUALITYGATE_TIMEOUT`**=`300` - таймаут ожидания состояния
@@ -276,3 +286,12 @@
 [ложных срабатываний]: https://jeremylong.github.io/DependencyCheck/general/suppression.html
 [guassp]: https://github.com/WoozyMasta/guassp
 [WoozyMasta]: https://github.com/WoozyMasta
+[generic]: https://docs.sonarqube.org/latest/analyzing-source-code/importing-external-issues/generic-issue-import-format/
+[hadolint-img]: https://img.shields.io/badge/hadolint-passing-brightgreen
+[gitleaks-img]: https://img.shields.io/badge/protected%20by-gitleaks-blue
+[license]: https://tldrlegal.com/l/gpl-3.0
+[license-img]: https://img.shields.io/badge/license-GPL--3-blue.svg
+[release-img]: https://img.shields.io/github/v/release/sentoz/multi-sonarqube-scanner-cli.svg
+[release]: https://github.com/sentoz/multi-sonarqube-scanner-cli/latest
+[docker-image-ci]: https://github.com/sentoz/multi-sonarqube-scanner-cli/actions/workflows/docker-images.yml
+[docker-image-ci-img]: https://github.com/sentoz/multi-sonarqube-scanner-cli/actions/workflows/docker-images.yml/badge.svg?branch=main

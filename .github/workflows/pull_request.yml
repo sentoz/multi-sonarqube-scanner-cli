@@ -1,0 +1,192 @@
+name: Check pull request
+on:
+  pull_request:
+    branches:
+      - 'main'
+    paths-ignore:
+      - '**.md'
+      - '**.png'
+      - '**.jpg'
+      - '**.svg'
+      - '**.yaml'
+      - CNAME
+      - LICENSE
+
+concurrency:
+  # Cancel any running workflow for the same branch when new commits are pushed.
+  # We group both by ref_name (available when CI is triggered by a push to a branch/tag)
+  # and head_ref (available when CI is triggered by a PR).
+  group: "${{ github.workflow }}-${{ github.ref_name }}-${{ github.head_ref }}"
+  cancel-in-progress: true
+
+jobs:
+  linters:
+    name: Linters
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+      - name: Shellcheck
+        uses: reviewdog/action-shellcheck@v1
+        with:
+          reporter: github-pr-review
+          pattern: "*.sh"
+          exclude: "./.git/*"
+      - name: markdownlint-cli
+        uses: nosborn/github-action-markdown-cli@v3.3.0
+        with:
+          files: .
+          config_file: .markdownlint.yaml
+          ignore_files: ./LICENSE
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  hadolint:
+    name: Hadolint
+    needs: [linters]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+      - name: hadolint
+        id: hadolint
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          recursive: true
+      - name: Update Pull Request
+        uses: actions/github-script@v6
+        if: github.event_name == 'pull_request'
+        with:
+          script: |
+            const output = `
+            #### Hadolint: \`${{ steps.hadolint.outcome }}\`
+            \`\`\`
+            ${process.env.HADOLINT_RESULTS}
+            \`\`\`
+            `;
+      
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
+
+
+
+  test_build_images:
+    name: Test building all docker images
+    needs: [hadolint]
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: write
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ${{ github.repository }}
+            ghcr.io/${{ github.repository }}
+      - name: Get PR Number
+        id: get-pr-number
+        uses: mgaitan/gha-get-pr-number@0.1
+      - name: Build base-focal image 
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: false
+          load: true
+          tags: base-focal:${{ steps.get-pr-number.outputs.number }}
+          labels: ${{ steps.meta.outputs.labels }}
+          file: Dockerfile.base-focal
+      - name:  Build base-jammy image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: false
+          load: true
+          tags: base-jammy:${{ steps.get-pr-number.outputs.number }}
+          labels: ${{ steps.meta.outputs.labels }}
+          file: Dockerfile.base-jammy
+      - name: Build standart image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: false
+          tags: standart:${{ steps.get-pr-number.outputs.number }}
+          labels: ${{ steps.meta.outputs.labels }}
+          file: Dockerfile
+          build-args: |
+            BASE_IMAGE_NAME=base-jammy
+            BASE_IMAGE_TAG=${{ steps.get-pr-number.outputs.number }}
+      - name: Build gradle 7.3.3 image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: false
+          tags: gradle7:${{ steps.get-pr-number.outputs.number }}
+          labels: ${{ steps.meta.outputs.labels }}
+          file: Dockerfile.gradle-7.3.3
+          build-args: |
+            BASE_IMAGE_NAME=base-jammy
+            BASE_IMAGE_TAG=${{ steps.get-pr-number.outputs.number }}
+      - name: Build gradle 8.1.1 image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: false
+          tags: gradle8:${{ steps.get-pr-number.outputs.number }}
+          labels: ${{ steps.meta.outputs.labels }}
+          file: Dockerfile.gradle-8.1.1
+          build-args: |
+            BASE_IMAGE_NAME=base-jammy
+            BASE_IMAGE_TAG=${{ steps.get-pr-number.outputs.number }}
+      - name: Build .Net 3.1 image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: false
+          tags: dotnet3:${{ steps.get-pr-number.outputs.number }}
+          labels: ${{ steps.meta.outputs.labels }}
+          file: Dockerfile.dotnet-3.1
+          build-args: |
+            BASE_IMAGE_NAME=base-focal
+            BASE_IMAGE_TAG=${{ steps.get-pr-number.outputs.number }}
+      - name: Build .Net 5.0 image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: false
+          tags: dotnet5:${{ steps.get-pr-number.outputs.number }}
+          labels: ${{ steps.meta.outputs.labels }}
+          file: Dockerfile.dotnet-5.0
+          build-args: |
+            BASE_IMAGE_NAME=base-focal
+            BASE_IMAGE_TAG=${{ steps.get-pr-number.outputs.number }}
+      - name: Build .Net 6.0 image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: false
+          tags: dotnet6:${{ steps.get-pr-number.outputs.number }}
+          labels: ${{ steps.meta.outputs.labels }}
+          file: Dockerfile.dotnet-6.0
+          build-args: |
+            BASE_IMAGE_NAME=base-jammy
+            BASE_IMAGE_TAG=${{ steps.get-pr-number.outputs.number }}
+      - name: Build .Net 7.0 image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: false
+          tags: dotnet7:${{ steps.get-pr-number.outputs.number }}
+          labels: ${{ steps.meta.outputs.labels }}
+          file: Dockerfile.dotnet-7.0
+          build-args: |
+            BASE_IMAGE_NAME=base-jammy
+            BASE_IMAGE_TAG=${{ steps.get-pr-number.outputs.number }}

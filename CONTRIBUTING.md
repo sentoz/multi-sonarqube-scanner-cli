@@ -15,8 +15,8 @@ Therefore, i have a number of requirements and wishes, please read them first.
 * When we fix something, we name the branch `fix_*`
 * Don’t forget to update `CHANGELOG.md` before opening MP
 * If something has changed, we check the relevance of the documentation
-* In the body of the MR we describe clearly what has changed and why, if there is a issue,
-   then we refer to it
+* In the body of the MR we describe clearly what has changed and why, if there
+  is a issue, then we refer to it
 * If the MR is open but not yet ready, keep it in status
    [draft][] until it's ready
 * Commits are named according to [conventional commits][]
