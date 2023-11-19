@@ -47,6 +47,9 @@ jobs:
   hadolint:
     name: Hadolint
     needs: [linters]
+    permissions:
+      pull-requests: write
+      issues: write
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
