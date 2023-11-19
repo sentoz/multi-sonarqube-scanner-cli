@@ -289,4 +289,5 @@ the same directory as the *.sln file according to the
 [release-img]: https://img.shields.io/github/v/release/sentoz/multi-sonarqube-scanner-cli.svg
 [release]: https://github.com/sentoz/multi-sonarqube-scanner-cli/latest
 [docker-image-ci]: https://github.com/sentoz/multi-sonarqube-scanner-cli/actions/workflows/docker-images.yml
-[docker-image-ci-img]: https://github.com/sentoz/multi-sonarqube-scanner-cli/actions/workflows/docker-images.yml/badge.svg?branch=main
+[docker-image-ci-img]:
+    https://github.com/sentoz/multi-sonarqube-scanner-cli/actions/workflows/docker-images.yml/badge.svg?branch=main
