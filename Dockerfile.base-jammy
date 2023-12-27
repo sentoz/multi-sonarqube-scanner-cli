@@ -5,7 +5,7 @@ LABEL org.opencontainers.image.authors="Dmitriy Okladin <sentoz66@gmail.com>"
 LABEL org.opencontainers.image.source="https://github.com/sentoz/multi-sonarqube-scanner-cli"
 
 ARG POSTGRES_DRIVER_VERSION=42.7.0
-ARG MYSQL_DRIVER_VERSION=8.0.23
+ARG MYSQL_DRIVER_VERSION=8.2.0
 ARG DEPENDENCY_CHECK_VERSION=9.0.7
 ARG DEPENDENCY_CHECK_HOME=/opt/dependency-check
 
