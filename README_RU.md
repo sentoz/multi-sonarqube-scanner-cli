@@ -200,7 +200,7 @@
   данных
 * **`OWASP_DEPENDENCY_CHECK_DB_USER`** - имя пользователя для подключения к
   базе данных
-* **`OWASP_DEPENDENCY_CHECK_CVE_VALID_HOURS`** - `24` - Кол-во часов через
+* **`OWASP_DEPENDENCY_CHECK_NVD_VALID_HOURS`** - `24` - Кол-во часов через
   сколько будет выполняться проверка наличия обновления базы из NVD.
 
 #### Критерии оценки

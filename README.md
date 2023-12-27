@@ -198,7 +198,7 @@ data from it, and not download it from the Internet at each start.
 * **`OWASP_DEPENDENCY_CHECK_DB_STRING`** - database connection string
 * **`OWASP_DEPENDENCY_CHECK_DB_PASSWORD`** - database connection password
 * **`OWASP_DEPENDENCY_CHECK_DB_USER`** - username to connect to the database
-* **`OWASP_DEPENDENCY_CHECK_CVE_VALID_HOURS`** - `24` - The number of hours
+* **`OWASP_DEPENDENCY_CHECK_NVD_VALID_HOURS`** - `24` - The number of hours
   after which the NVD will check for a database update.
 
 #### Criteria for evaluation
