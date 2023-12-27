@@ -606,5 +606,7 @@ jobs:
             * `docker pull docker.io/sentoz/multi-sonarqube-scanner-cli:${{ steps.env.outputs.PROJECT_TAG }}-dotnet-5.0`
             * `docker pull docker.io/sentoz/multi-sonarqube-scanner-cli:${{ steps.env.outputs.PROJECT_TAG }}-dotnet-6.0`
             * `docker pull docker.io/sentoz/multi-sonarqube-scanner-cli:${{ steps.env.outputs.PROJECT_TAG }}-dotnet-7.0`
+
+            [CHANGELOG.md](https://github.com/sentoz/multi-sonarqube-scanner-cli/blob/${{ steps.env.outputs.PROJECT_TAG }}/CHANGELOG.md)
           draft: false
           prerelease: false
