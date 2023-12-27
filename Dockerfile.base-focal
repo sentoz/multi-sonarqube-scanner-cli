@@ -47,7 +47,7 @@ RUN set -eux; \
     unzip dependency-check.zip; \
     rm dependency-check.zip; \
     wget -U "scannercli" -q -O "$DEPENDENCY_CHECK_HOME/plugins/postgresql-$POSTGRES_DRIVER_VERSION.jar" https://jdbc.postgresql.org/download/postgresql-$POSTGRES_DRIVER_VERSION.jar; \
-    wget -U "scannercli" -q -O /opt/mysql-connector-java-$MYSQL_DRIVER_VERSION.zip https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-$MYSQL_DRIVER_VERSION.zip; \
+    wget -U "scannercli" -q -O /opt/mysql-connector-java-$MYSQL_DRIVER_VERSION.zip https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-j-$MYSQL_DRIVER_VERSION.zip; \
     unzip mysql-connector-java-$MYSQL_DRIVER_VERSION.zip; \
     mv mysql-connector-java-$MYSQL_DRIVER_VERSION/mysql-connector-java-$MYSQL_DRIVER_VERSION.jar $DEPENDENCY_CHECK_HOME/plugins/mysql-connector-java-$MYSQL_DRIVER_VERSION.jar; \
     rm -rf mysql-connector-java-$MYSQL_DRIVER_VERSION.zip mysql-connector-java-$MYSQL_DRIVER_VERSION; \
