@@ -55,13 +55,13 @@ Special thanks to [WoozyMasta][] for the utility [guassp][].
 
 You need to pass arguments to build.:
 
-* **`SONAR_SCANNER_VERSION`**=`4.8.0.2856` - version of the scanner, you can
+* **`SONAR_SCANNER_VERSION`**=`5.0.1.3006` - version of the scanner, you can
   take in project repositories [sonar-scanner-cli][]
-* **`DOTNET_SONARSCANNER_VERSION`**=`5.11` - dotnet-sonarscanner version
+* **`DOTNET_SONARSCANNER_VERSION`**=`6.0` - dotnet-sonarscanner version
 * **`GRADLE_VERSION`**=`8.1.1` - gradle version
-* **`POSTGRES_DRIVER_VERSION`**=`42.2.19` - postgres driver version
-* **`MYSQL_DRIVER_VERSION`**=`8.0.23` - mysql driver version
-* **`DEPENDENCY_CHECK_VERSION`**=`8.1.2` - [DependencyCheck][] version
+* **`POSTGRES_DRIVER_VERSION`**=`42.7.0` - postgres driver version
+* **`MYSQL_DRIVER_VERSION`**=`8.2.0` - mysql driver version
+* **`DEPENDENCY_CHECK_VERSION`**=`9.0.7` - [DependencyCheck][] version
 
 ### Building an Image with a Plugin Cache
 
@@ -198,7 +198,7 @@ data from it, and not download it from the Internet at each start.
 * **`OWASP_DEPENDENCY_CHECK_DB_STRING`** - database connection string
 * **`OWASP_DEPENDENCY_CHECK_DB_PASSWORD`** - database connection password
 * **`OWASP_DEPENDENCY_CHECK_DB_USER`** - username to connect to the database
-* **`OWASP_DEPENDENCY_CHECK_CVE_VALID_HOURS`** - `24` - The number of hours
+* **`OWASP_DEPENDENCY_CHECK_NVD_VALID_HOURS`** - `24` - The number of hours
   after which the NVD will check for a database update.
 
 #### Criteria for evaluation
