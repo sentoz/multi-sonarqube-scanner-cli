@@ -554,6 +554,66 @@ jobs:
           build-args: |
             BASE_IMAGE_NAME=${{ github.repository }}
             BASE_IMAGE_TAG=${{ steps.tag.outputs.PROJECT_TAG }}-base-jammy
+  build_dotnet_8_image:
+    needs: [build_base_images_jammy]
+    name: Build .Net 8.0 image
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: write
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+      - name: Hadolint
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: Dockerfile.dotnet-8.0
+      - name: Log in to Docker Hub Container registry
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Log in to GitHub Container registry
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ${{ github.repository }}
+            ghcr.io/${{ github.repository }}
+          flavor: |
+            latest=false
+            suffix=-dotnet-8.0,onlatest=true
+          tags: |
+            type=semver,pattern={{version}}
+            type=schedule,pattern=latest
+      - name: Set tag
+        id: tag
+        shell: bash
+        run: |
+          if [[ $GITHUB_REF_TYPE == "tag" ]] ; then
+            echo "PROJECT_TAG=${GITHUB_REF#refs/tags/}"  >> $GITHUB_OUTPUT
+          elif [[ $GITHUB_REF_TYPE == "branch" ]] ; then
+            echo "PROJECT_TAG=latest"  >> $GITHUB_OUTPUT
+          fi
+      - name: Build and push Docker .Net-8.0
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          file: Dockerfile.dotnet-8.0
+          build-args: |
+            BASE_IMAGE_NAME=${{ github.repository }}
+            BASE_IMAGE_TAG=${{ steps.tag.outputs.PROJECT_TAG }}-base-jammy
   release:
     needs:
       - build_standart_image
@@ -563,6 +623,7 @@ jobs:
       - build_dotnet_5_image
       - build_dotnet_6_image
       - build_dotnet_7_image
+      - build_dotnet_8_image
     name: Release
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
     runs-on: ubuntu-latest
@@ -601,11 +662,13 @@ jobs:
             * `docker pull ghcr.io/sentoz/multi-sonarqube-scanner-cli:${{ steps.env.outputs.PROJECT_TAG }}-dotnet-5.0`
             * `docker pull ghcr.io/sentoz/multi-sonarqube-scanner-cli:${{ steps.env.outputs.PROJECT_TAG }}-dotnet-6.0`
             * `docker pull ghcr.io/sentoz/multi-sonarqube-scanner-cli:${{ steps.env.outputs.PROJECT_TAG }}-dotnet-7.0`
+            * `docker pull ghcr.io/sentoz/multi-sonarqube-scanner-cli:${{ steps.env.outputs.PROJECT_TAG }}-dotnet-8.0`
 
             * `docker pull docker.io/sentoz/multi-sonarqube-scanner-cli:${{ steps.env.outputs.PROJECT_TAG }}-dotnet-3.1`
             * `docker pull docker.io/sentoz/multi-sonarqube-scanner-cli:${{ steps.env.outputs.PROJECT_TAG }}-dotnet-5.0`
             * `docker pull docker.io/sentoz/multi-sonarqube-scanner-cli:${{ steps.env.outputs.PROJECT_TAG }}-dotnet-6.0`
             * `docker pull docker.io/sentoz/multi-sonarqube-scanner-cli:${{ steps.env.outputs.PROJECT_TAG }}-dotnet-7.0`
+            * `docker pull docker.io/sentoz/multi-sonarqube-scanner-cli:${{ steps.env.outputs.PROJECT_TAG }}-dotnet-8.0`
 
             [CHANGELOG.md](https://github.com/sentoz/multi-sonarqube-scanner-cli/blob/${{ steps.env.outputs.PROJECT_TAG }}/CHANGELOG.md)
           draft: false

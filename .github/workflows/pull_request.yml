@@ -195,3 +195,14 @@ jobs:
           build-args: |
             BASE_IMAGE_NAME=base-jammy
             BASE_IMAGE_TAG=${{ steps.get-pr-number.outputs.number }}
+      - name: Build .Net 8.0 image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: false
+          tags: dotnet8:${{ steps.get-pr-number.outputs.number }}
+          labels: ${{ steps.meta.outputs.labels }}
+          file: Dockerfile.dotnet-8.0
+          build-args: |
+            BASE_IMAGE_NAME=base-jammy
+            BASE_IMAGE_TAG=${{ steps.get-pr-number.outputs.number }}
