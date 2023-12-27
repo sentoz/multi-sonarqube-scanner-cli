@@ -55,13 +55,13 @@ Special thanks to [WoozyMasta][] for the utility [guassp][].
 
 You need to pass arguments to build.:
 
-* **`SONAR_SCANNER_VERSION`**=`4.8.0.2856` - version of the scanner, you can
+* **`SONAR_SCANNER_VERSION`**=`5.0.1.3006` - version of the scanner, you can
   take in project repositories [sonar-scanner-cli][]
-* **`DOTNET_SONARSCANNER_VERSION`**=`5.11` - dotnet-sonarscanner version
+* **`DOTNET_SONARSCANNER_VERSION`**=`6.0` - dotnet-sonarscanner version
 * **`GRADLE_VERSION`**=`8.1.1` - gradle version
-* **`POSTGRES_DRIVER_VERSION`**=`42.2.19` - postgres driver version
-* **`MYSQL_DRIVER_VERSION`**=`8.0.23` - mysql driver version
-* **`DEPENDENCY_CHECK_VERSION`**=`8.1.2` - [DependencyCheck][] version
+* **`POSTGRES_DRIVER_VERSION`**=`42.7.0` - postgres driver version
+* **`MYSQL_DRIVER_VERSION`**=`8.2.0` - mysql driver version
+* **`DEPENDENCY_CHECK_VERSION`**=`9.0.7` - [DependencyCheck][] version
 
 ### Building an Image with a Plugin Cache
 

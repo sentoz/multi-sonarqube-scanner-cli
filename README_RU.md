@@ -55,13 +55,13 @@
 
 Для сборки необходимо передать аргументы:
 
-* **`SONAR_SCANNER_VERSION`**=`4.8.0.2856` - версия сканера, взять можно в
+* **`SONAR_SCANNER_VERSION`**=`5.0.1.3006` - версия сканера, взять можно в
   репозитории проекта [sonar-scanner-cli][]
-* **`DOTNET_SONARSCANNER_VERSION`**=`5.4.1` - версия dotnet-sonarscanner
+* **`DOTNET_SONARSCANNER_VERSION`**=`6.0` - версия dotnet-sonarscanner
 * **`GRADLE_VERSION`**=`8.1.1` - версия gradle
-* **`POSTGRES_DRIVER_VERSION`**=`42.2.19` - версия драйвера postgres
-* **`MYSQL_DRIVER_VERSION`**=`8.0.23` - версия драйвера mysql
-* **`DEPENDENCY_CHECK_VERSION`**=`8.1.2` - версия [DependencyCheck][]
+* **`POSTGRES_DRIVER_VERSION`**=`42.7.0` - версия драйвера postgres
+* **`MYSQL_DRIVER_VERSION`**=`8.3.0` - версия драйвера mysql
+* **`DEPENDENCY_CHECK_VERSION`**=`9.0.7` - версия [DependencyCheck][]
 
 ### Сборка образа с кэшем плагинов
 
