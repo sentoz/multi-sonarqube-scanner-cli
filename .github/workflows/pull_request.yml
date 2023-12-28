@@ -31,6 +31,7 @@ jobs:
       - name: Shellcheck
         uses: reviewdog/action-shellcheck@v1
         with:
+          github_token: ${{ secrets.github_token }}
           reporter: github-pr-review
           pattern: "*.sh"
           exclude: "./.git/*"
