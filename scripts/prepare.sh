@@ -14,7 +14,7 @@ version="${REF_NAME:-MR-${MERGE_REQUEST_ID:-0}}"
 # Check default branch name
 # Get branches list data
 sq_branches="$(
-  sq-api project_branches/list -d "project=$SONARQUBE_PROJECT_KEY" ||
+  sq-api project_branches/list?project="$SONARQUBE_PROJECT_KEY" ||
     echo '{}'
 )"
 
@@ -55,6 +55,9 @@ fi
   "you must first run analyze on the default ($DEFAULT_BRANCH)" \
   'branch, only then will you be able to parse merge requests, tags,' \
   "and other branches. $SUPPORT_CONTACTS"
+
+# TODO migrate to a new method that allows you to change the default
+# TODO branch. think through the logic if the default branch is new.
 
 # Get name of current default branch in SQ
 sq_curent_default_branch="$(

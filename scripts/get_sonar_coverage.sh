@@ -9,11 +9,21 @@ sq-api() {
     "${SONARQUBE_URL:-}/api/$path" "${@}"
 }
 
+# Encode url symbols
+urlencode() {
+  local LC_COLLATE=C length="${#1}"
+  for ((i = 0; i < length; i++)); do
+    local c="${1:$i:1}"
+    case $c in
+      [a-zA-Z0-9.~_-]) printf '%s' "$c" ;;
+                    *) printf '%%%02X' "'$c" ;;
+    esac
+  done
+}
+
 coverage=$(
-  sq-api measures/component \
-    -d "component=$SONARQUBE_PROJECT_KEY" \
-    -d "metricKeys=coverage" \
-    -d "${coverage_reference:-}" |
+  sq-api \
+    "measures/component?component=$(urlencode "$SONARQUBE_PROJECT_KEY")&metricKeys=coverage&${coverage_reference:-}" |
     jq -er '.component.measures[] | select(.metric == "coverage") | .value' || :
 )
 
