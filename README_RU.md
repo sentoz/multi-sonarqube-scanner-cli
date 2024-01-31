@@ -93,7 +93,7 @@
 
 ### Стандартный образ
 
-`sentoz/multi-sonarqube-scanner-cli:0.2.0`
+`sentoz/multi-sonarqube-scanner-cli:0.2.1`
 
 Данный образ позволяет сканировать проекты реализованные на языках:
 
@@ -107,19 +107,19 @@
 
 ### Образы для анализа .NET проектов
 
-`sentoz/multi-sonarqube-scanner-cli:0.2.0-dotnet-3.1`  
-`sentoz/multi-sonarqube-scanner-cli:0.2.0-dotnet-5.0`  
-`sentoz/multi-sonarqube-scanner-cli:0.2.0-dotnet-6.0`  
-`sentoz/multi-sonarqube-scanner-cli:0.2.0-dotnet-7.0`  
-`sentoz/multi-sonarqube-scanner-cli:0.2.0-dotnet-8.0`  
+`sentoz/multi-sonarqube-scanner-cli:0.2.1-dotnet-3.1`  
+`sentoz/multi-sonarqube-scanner-cli:0.2.1-dotnet-5.0`  
+`sentoz/multi-sonarqube-scanner-cli:0.2.1-dotnet-6.0`  
+`sentoz/multi-sonarqube-scanner-cli:0.2.1-dotnet-7.0`  
+`sentoz/multi-sonarqube-scanner-cli:0.2.1-dotnet-8.0`  
 
 Каждый образ собирается на последней стабильной версии `.Net`, включает в себя
 `dotnet sonarscanner` и `reportgenerator`.
 
 ### Образ для анализа Gradle проектов
 
-`sentoz/multi-sonarqube-scanner-cli:0.2.0-gradle-8.1.1`  
-`sentoz/multi-sonarqube-scanner-cli:0.2.0-gradle-7.3.3`  
+`sentoz/multi-sonarqube-scanner-cli:0.2.1-gradle-8.1.1`  
+`sentoz/multi-sonarqube-scanner-cli:0.2.1-gradle-7.3.3`  
 
 В образ пакуются бинарные файлы gradle последней стабильной версии.
 

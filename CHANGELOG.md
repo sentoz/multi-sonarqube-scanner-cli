@@ -5,6 +5,12 @@ All noticeable changes to this project will be documented in this file.
 The format is based on [changelog][keepachangelog], and this project adheres
 to [semantic versioning][semver].
 
+## [0.2.1][] `2023-12-27`
+
+### Fixed
+
+* Request coverage and project with api sonarqube
+
 ## [0.2.0][] `2023-12-27`
 
 ### Added
@@ -41,6 +47,7 @@ to [semantic versioning][semver].
 
 <!-- Tags -->
 
+[0.2.1]: https://github.com/sentoz/multi-sonarqube-scanner-cli/tree/0.2.2
 [0.2.0]: https://github.com/sentoz/multi-sonarqube-scanner-cli/tree/0.2.0
 [0.1.2]: https://github.com/sentoz/multi-sonarqube-scanner-cli/tree/0.1.2
 [0.1.1]: https://github.com/sentoz/multi-sonarqube-scanner-cli/tree/0.1.1
